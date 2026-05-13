@@ -1,0 +1,35 @@
+
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+
+
+.venv/
+venv/
+env/
+ENV/
+
+
+# Nie wysyłamy wygenerowanych wykresów, by nie obciążać repozytorium historii Gita.
+# Kod powinien generować je na nowo u każdego, kto uruchomi skrypty.
+results/plots/*.png
+results/plots/*.pdf
+results/plots/*.svg
+*.log
+
+
+.claude/
+*.claude
+.cursor/
+.cursorrules
+
+
+.vscode/
+.idea/
+*.swp
+*.swo
+
+.DS_Store
+Thumbs.db

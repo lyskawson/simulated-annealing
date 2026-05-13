@@ -1,7 +1,6 @@
 # Discrete Knapsack — Random Search & Simulated Annealing
 
-**Course:** Zaawansowane Techniki Optymalizacji, Lab 5
-**Problem:** 2.5 — Discrete Knapsack Problem
+**Problem:** Discrete Knapsack Problem
 
 ## Quick start
 
