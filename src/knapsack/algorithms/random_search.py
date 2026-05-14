@@ -11,12 +11,6 @@ from .base import AlgorithmResult
 
 
 class RandomSearch:
-    """Random Search (RS) for maximisation, as per instrukcja.pdf section 3.3.
-
-    In each iteration a random neighbor x' is drawn.
-    If f(x') > f(x) the current solution is updated.
-    Because x only improves, the current solution equals the best at all times.
-    """
 
     def __init__(self, neighborhood: Neighborhood, stopping: StoppingCondition) -> None:
         self._neighborhood = neighborhood

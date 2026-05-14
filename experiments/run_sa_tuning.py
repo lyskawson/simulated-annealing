@@ -24,13 +24,27 @@ _PLOT_DIR = "results/plots"
 _BASE = dict(alpha=0.995, t0=None, init="random", neighborhood="bitflip")
 
 
-def run_variant(instance, neighborhood, alpha, t0, init_fn, runs) -> np.ndarray:
+def run_variant(
+    instance, neighborhood, alpha, t0, init_fn, runs,
+    strategy="reject", penalty_coeff=11.0
+) -> np.ndarray:
     histories = []
     for run_id in range(runs):
         rng = random.Random(run_id * 1000 + 7)
-        algo = SimulatedAnnealing(neighborhood, MaxIterStopping(_MAX_ITER),
-                                  geometric(alpha), initial_temperature=t0)
-        r = algo.run(instance, init_fn(instance).copy(), rng, record_every=_RECORD)
+        algo = SimulatedAnnealing(
+            neighborhood,
+            MaxIterStopping(_MAX_ITER),
+            geometric(alpha),
+            initial_temperature=t0
+        )
+        r = algo.run(
+            instance,
+            init_fn(instance).copy(),
+            rng,
+            strategy=strategy,
+            penalty_coeff=penalty_coeff,
+            record_every=_RECORD
+        )
         histories.append(r.best_history)
     return np.array(histories)
 
@@ -127,6 +141,31 @@ def main() -> None:
     save_plot(ax, f"Effect of neighborhood  (n={_N}, α={_BASE['alpha']})",
               os.path.join(_PLOT_DIR, "sa_neighborhood.png"))
 
+    # ------------------------------------------------------------------ #
+    # Plot 5: effect of constraint strategy (reject vs penalty)           #
+    # ------------------------------------------------------------------ #
+    fig, ax = plt.subplots(figsize=(9, 5))
+    print("\nConstraint strategy comparison:")
+
+    # Definiujemy warianty badawcze: (etykieta, strategia, współczynnik)
+    strategies = [
+        ("Reject (Twarde odrzucenie)", "reject", 11.0),
+        ("Penalty (Kara restrykcyjna = 11.0)", "penalty", 11.0),
+        ("Penalty (Kara łagodna = 5.0)", "penalty", 5.0)
+    ]
+    colors5 = ["#E91E63", "#9C27B0", "#00BCD4"]
+
+    for (label, strat, coeff), color in zip(strategies, colors5):
+        matrix = run_variant(
+            instance, bf, alpha=_BASE["alpha"], t0=None,
+            init_fn=inits[_BASE["init"]], runs=_RUNS,
+            strategy=strat, penalty_coeff=coeff
+        )
+        final = add_curve(ax, matrix, label, color)
+        print(f"  {label:<35}  mean_final={final:.1f}")
+
+    save_plot(ax, f"Effect of constraint strategy  (n={_N}, α={_BASE['alpha']})",
+              os.path.join(_PLOT_DIR, "sa_strategy.png"))
 
 if __name__ == "__main__":
     main()

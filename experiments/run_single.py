@@ -46,7 +46,7 @@ def main() -> None:
 
     print("\n--- Simulated Annealing ---")
     rng_sa = random.Random(_ALGO_SEED)
-    result = SimulatedAnnealing(neighborhood, stopping, geometric(0.995)).run(instance, init.copy(), rng_sa)
+    result = SimulatedAnnealing(neighborhood, stopping, geometric(0.995), 10 ).run(instance, init.copy(), rng_sa)
     print(f"  best value : {result.best_value}")
     print(f"  iterations : {result.iterations}")
     print(f"  runtime    : {result.runtime_seconds:.3f}s")

@@ -10,6 +10,8 @@ from ..neighborhood import Neighborhood
 from ..solution import Solution, ConstraintStrategy
 from ..stopping import StoppingCondition
 from .base import AlgorithmResult
+from ..initial import random_feasible_solution
+
 
 _MIN_TEMP = 1e-10
 
@@ -22,13 +24,6 @@ def estimate_initial_temperature(
     n_samples: int = 1000,
     factor: float = 1.0,
 ) -> float:
-    """Estimate T0 from the range of objective values over 1000 random feasible solutions.
-
-    Based on instrukcja.pdf: range = max(f) - min(f), then T0 = factor * range.
-    Uses random_feasible_solution to avoid -inf contaminating the range when strategy='reject'.
-    """
-    from ..initial import random_feasible_solution
-
     values = [
         random_feasible_solution(instance, rng).objective(instance, strategy, penalty_coeff)
         for _ in range(n_samples)
@@ -38,14 +33,6 @@ def estimate_initial_temperature(
 
 
 class SimulatedAnnealing:
-    """Simulated Annealing (SA) for maximisation, as per instrukcja.pdf section 3.5.
-
-    Acceptance function (adapted for maximisation):
-        When f(x') <= f(x):  accept with probability exp((f(x') - f(x)) / t)
-        Delta = f(x') - f(x) <= 0, so exp(Delta/t) in (0, 1].
-
-    xbest is maintained separately because SA may accept worsening moves.
-    """
 
     def __init__(
         self,
@@ -59,7 +46,7 @@ class SimulatedAnnealing:
         self._neighborhood = neighborhood
         self._stopping = stopping
         self._cooling = cooling
-        self._initial_temperature = initial_temperature  # None → estimated at run time
+        self._initial_temperature = initial_temperature
         self._t0_factor = t0_factor
         self._t0_samples = t0_samples
 
@@ -86,7 +73,9 @@ class SimulatedAnnealing:
 
         x = initial_solution.copy()
         f_x = x.objective(instance, strategy, penalty_coeff)
-        x_best, f_best = x.copy(), f_x
+
+        x_best = x.copy()
+        f_best = f_x
 
         best_history: list[float] = []
         current_history: list[float] = []
@@ -99,14 +88,17 @@ class SimulatedAnnealing:
             f_prime = x_prime.objective(instance, strategy, penalty_coeff)
 
             if f_prime > f_x:
-                x, f_x = x_prime, f_prime
+                x = x_prime
+                f_x = f_prime
             else:
-                delta = f_prime - f_x  # <= 0
+                delta = f_prime - f_x
                 if rng.random() < math.exp(delta / t):
-                    x, f_x = x_prime, f_prime
+                    x = x_prime
+                    f_x = f_prime
 
             if f_x > f_best:
-                x_best, f_best = x.copy(), f_x
+                x_best = x.copy()
+                f_best = f_x
 
             t = self._cooling(t)
 
