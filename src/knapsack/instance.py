@@ -3,7 +3,6 @@ from __future__ import annotations
 import sys
 import os
 from dataclasses import dataclass
-
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 from RandomNumberGenerator import RandomNumberGenerator
 

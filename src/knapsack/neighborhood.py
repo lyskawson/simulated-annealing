@@ -9,11 +9,11 @@ from .solution import Solution
 class Neighborhood(ABC):
     @abstractmethod
     def random_neighbor(self, solution: Solution, rng: random.Random) -> Solution:
-        """Return one random neighbor in O(n) time, without enumerating the full neighborhood."""
+        """Return one random neighbor in O(n) time"""
 
 
 class BitFlipNeighborhood(Neighborhood):
-    """Flip one randomly chosen bit. Neighborhood size = n."""
+    """Flip one randomly chosen bit"""
 
     def random_neighbor(self, solution: Solution, rng: random.Random) -> Solution:
         idx = rng.randrange(len(solution))
@@ -23,10 +23,9 @@ class BitFlipNeighborhood(Neighborhood):
 
 
 class SwapNeighborhood(Neighborhood):
-    """Swap one position that is 1 with one position that is 0.
-
-    Neighborhood size = |ones| * |zeros|.
-    Falls back to BitFlip when all bits are 0 or all are 1.
+    """
+    Swap one position that is 1 with one position that is 0
+    Falls back to BitFlip when all bits are 0 or all are 1
     """
 
     def random_neighbor(self, solution: Solution, rng: random.Random) -> Solution:

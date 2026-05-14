@@ -8,7 +8,7 @@ CoolingFn = Callable[[float], float]
 
 
 def geometric(alpha: float) -> CoolingFn:
-    """t <- alpha * t.  alpha typically in [0.95, 0.9999]."""
+    """t <- alpha * t, alpha [0.95, 0.9999]."""
     if not (0.0 < alpha < 1.0):
         raise ValueError(f"alpha must be in (0, 1), got {alpha}")
 
@@ -20,7 +20,7 @@ def geometric(alpha: float) -> CoolingFn:
 
 
 def linear(beta: float) -> CoolingFn:
-    """t <- t - beta."""
+    """t <- t - beta """
     if beta <= 0:
         raise ValueError(f"beta must be positive, got {beta}")
 

@@ -6,7 +6,7 @@ from abc import ABC, abstractmethod
 
 class StoppingCondition(ABC):
     def reset(self) -> None:
-        """Called before each algorithm run. Override when the condition has state."""
+        """Override when the condition has state."""
 
     @abstractmethod
     def should_stop(self, iteration: int, best_value: float, start_time: float) -> bool: ...
@@ -29,7 +29,6 @@ class TimeStopping(StoppingCondition):
 
 
 class NoImprovementStopping(StoppingCondition):
-    """Stop after this many consecutive iterations without improvement."""
 
     def __init__(self, patience: int) -> None:
         self.patience = patience

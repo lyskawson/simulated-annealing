@@ -12,7 +12,7 @@ class AlgorithmResult:
     best_solution: Solution
     best_value: float
     best_history: list[float]     # best objective value at each recorded iteration
-    current_history: list[float]  # current solution value at each recorded iteration (SA explores below best)
+    current_history: list[float]  # current solution value at each recorded iteration
     runtime_seconds: float
     iterations: int
     params: dict[str, Any] = field(default_factory=dict)

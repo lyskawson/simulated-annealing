@@ -23,12 +23,12 @@ def random_feasible_solution(instance: Instance, rng: random.Random) -> Solution
 
 
 def empty_solution(instance: Instance) -> Solution:
-    """All-zeros solution (always feasible, value = 0)."""
+    """All-zeros solution"""
     return Solution(bits=[0] * instance.n)
 
 
 def greedy_solution(instance: Instance) -> Solution:
-    """Greedy by value/weight ratio (descending): take items while they fit."""
+    """Greedy by value/weight"""
     order = sorted(
         range(instance.n),
         key=lambda i: instance.costs[i] / instance.weights[i],

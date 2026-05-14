@@ -10,12 +10,14 @@ from src.knapsack.cooling import geometric
 from src.knapsack.initial import greedy_solution, random_feasible_solution
 from src.knapsack.instance import generate_instance
 from src.knapsack.neighborhood import BitFlipNeighborhood
-from src.knapsack.stopping import MaxIterStopping
+from src.knapsack.stopping import MaxIterStopping, TimeStopping, NoImprovementStopping
 
 _N = 20
 _SEED = 42
 _ALGO_SEED = 1
 _MAX_ITER = 50000
+_MAX_TIME = 10.0
+_PATIENCE = 500000
 
 def main() -> None:
     instance = generate_instance(_N, _SEED)
@@ -25,7 +27,11 @@ def main() -> None:
     print(f"  greedy solution value: {greedy_solution(instance).total_value(instance)}")
 
     neighborhood = BitFlipNeighborhood()
-    stopping = MaxIterStopping(_MAX_ITER)
+    #neighborhood = SwapNeighborhood()
+
+    #stopping = MaxIterStopping(_MAX_ITER)
+    stopping = NoImprovementStopping(_PATIENCE)
+    #stopping = TimeStopping(10.0)
 
     rng = random.Random(_ALGO_SEED)
     init = random_feasible_solution(instance, rng)

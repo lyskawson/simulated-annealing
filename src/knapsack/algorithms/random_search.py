@@ -29,7 +29,7 @@ class RandomSearch:
         rng: random.Random,
         strategy: ConstraintStrategy = "reject",
         penalty_coeff: float = 11.0,
-        record_every: int = 1,
+        record_every: int = 100,
     ) -> AlgorithmResult:
         self._stopping.reset()
 

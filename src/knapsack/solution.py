@@ -8,7 +8,7 @@ from .instance import Instance
 ConstraintStrategy = Literal["reject", "penalty"]
 
 _NEG_INF = float("-inf")
-_DEFAULT_PENALTY_COEFF = 11  # strictly > max(c_i)=10, so no excess weight is ever beneficial
+_DEFAULT_PENALTY_COEFF = 11
 
 
 @dataclass
@@ -40,7 +40,6 @@ class Solution:
         if strategy == "reject":
             return float(value) if excess == 0 else _NEG_INF
 
-        # penalty strategy: penalise excess weight proportionally
         return float(value - penalty_coeff * excess)
 
     def __len__(self) -> int:
